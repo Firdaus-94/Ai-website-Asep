@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       headers: {
         "Authorization": "Bearer " + API_KEY,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://ai-website-asep.vercel.app", // optional tapi bagus
+        "HTTP-Referer": "https://ai-website-asep.vercel.app",
         "X-Title": "AI Website Asep"
       },
       body: JSON.stringify({
@@ -27,14 +27,8 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // 🔥 HANDLE ERROR BIAR NGGAK CRASH
-    if (!response.ok) {
-      console.log("ERROR:", data);
-      return res.status(500).json({ error: data });
-    }
-
     return res.status(200).json({
-      reply: data.choices?.[0]?.message?.content || "Tidak ada respon"
+      reply: data.choices?.[0]?.message?.content || "No response"
     });
 
   } catch (err) {
