@@ -904,6 +904,11 @@ async function getAIResponse(userText) {
 
     let data = await response.json();
 
+    if (!data.choices) {
+      console.log(data);
+      return "❌ API error (cek console)";
+    }
+
     return data.choices[0].message.content;
 
   } catch (err) {
