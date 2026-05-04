@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+export default async function handler(req, res) {
   const API_KEY = process.env.OPENAI_API_KEY;
 
   if (req.method !== "POST") {
@@ -24,12 +25,17 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    console.log("OPENAI RESPONSE:", data);
 
-    return res.status(200).json({
-      reply: data.choices[0].message.content
-    });
+    const reply =
+      data?.choices?.[0]?.message?.content ||
+      data?.choices?.[0]?.text ||
+      "❌ AI tidak merespon";
+
+    return res.status(200).json({ reply });
 
   } catch (err) {
+    console.error("ERROR:", err);
     return res.status(500).json({ error: err.message });
   }
 }
