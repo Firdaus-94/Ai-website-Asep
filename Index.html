@@ -891,28 +891,26 @@ const input = document.getElementById("chat-input");
 const box = document.getElementById("chat-box");
 
 async function getAIResponse(userText) {
-  const API_KEY = "ISI_API_KEY";
-
   try {
     let response = await fetch("/api/chat", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + API_KEY
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-  message: userText
-})
+        message: userText
+      })
     });
 
     let data = await response.json();
-return data.choices[0].message.content;
 
-  } 
-  catch (err) {
+    return data.choices[0].message.content;
+
+  } catch (err) {
     return "❌ AI error";
   }
-} // ✅ PENUTUP WAJIB
+}
+  // ✅ PENUTUP WAJIB
 
 
 // ===============================
