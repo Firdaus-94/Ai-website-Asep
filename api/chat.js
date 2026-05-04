@@ -1,4 +1,10 @@
 export default async function handler(req, res) {
+  const API_KEY = process.env.OPENAI_API_KEY;
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
     const { message } = req.body;
 
@@ -6,12 +12,12 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + process.env.OPENAI_API_KEY
+        "Authorization": "Bearer " + API_KEY
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: "Kamu adalah AI santai dan pintar." },
+          { role: "system", content: "Kamu AI santai dan pintar." },
           { role: "user", content: message }
         ]
       })
@@ -19,9 +25,11 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    res.status(200).json(data);
+    console.log("AI RESPONSE:", data); // 🔥 DEBUG
+
+    return res.status(200).json(data);
 
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: err.message });
   }
 }
