@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: "Kamu AI santai dan pintar." },
+          { role: "system", content: "Kamu AI santai dan ramah" },
           { role: "user", content: message }
         ]
       })
@@ -25,9 +25,9 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    console.log("AI RESPONSE:", data); // 🔥 DEBUG
-
-    return res.status(200).json(data);
+    return res.status(200).json({
+      reply: data.choices[0].message.content
+    });
 
   } catch (err) {
     return res.status(500).json({ error: err.message });
