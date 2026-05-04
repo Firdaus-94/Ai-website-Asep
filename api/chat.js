@@ -12,10 +12,12 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Authorization": "Bearer " + API_KEY,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://ai-website-asep.vercel.app", // optional tapi bagus
+        "X-Title": "AI Website Asep"
       },
       body: JSON.stringify({
-        model: "mistralai/mistral-7b-instruct", // GRATIS
+        model: "mistralai/mistral-7b-instruct",
         messages: [
           { role: "system", content: "Kamu AI santai dan ramah" },
           { role: "user", content: message }
@@ -25,8 +27,14 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    // 🔥 HANDLE ERROR BIAR NGGAK CRASH
+    if (!response.ok) {
+      console.log("ERROR:", data);
+      return res.status(500).json({ error: data });
+    }
+
     return res.status(200).json({
-      reply: data.choices[0].message.content
+      reply: data.choices?.[0]?.message?.content || "Tidak ada respon"
     });
 
   } catch (err) {
